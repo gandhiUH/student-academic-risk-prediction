@@ -38,5 +38,38 @@ This project includes:
 |Logistic Regression| 0.848	  |  0.733	  | 0.846	 | 0.786|
 |Random Forest	     | 0.924	  |  0.955	  | 0.808	 | 0.875|
 
-Model B achieved higher accuracy, precision, and F1-score on the held-out test set. However, Model A achieved higher recall, identifying 22 of the 26 students who eventually received final grades below 10, compared with 21 identified by Model B. These results highlight the importance of considering false negatives when evaluating models intended to support early academic-risk identification.
+Model B achieved higher accuracy, precision, and F1-score on the held-out test set. However, Model A achieved a higher recall, identifying 22 of the 26 students who eventually received final grades below 10, compared with 21 students identified by Model B. These results highlight the importance of considering false negatives when evaluating models intended to support early academic-risk identification.
+
+## Education Resource-Planning Analysis
+A hypothetical tutoring-capacity scenario was developed for the 79-student test cohort, assuming 20 available tutoring places.
+
+At a classification threshold of 0.5:
+
+Model A flagged 30 students, exceeding the hypothetical capacity by 10 places. Model B flagged 22 students, exceeding the hypothetical capacity by two places.
+
+Additional threshold analysis showed that increasing the classification threshold reduced the number of students flagged but could increase the number of students with low final grades who were missed.
+
+The analysis illustrates how predictive analytics can inform academic-support planning while highlighting the importance of considering false negatives, available capacity, and educator review.
+
+## Limitations 
+
+This project is a proof os concept using a small public dataset from Portuguese secondary schools. The results should not be assumed to generalize to US school districts.
+
+A final grade below 10 is an academic outcome, not a validated measure of individual tutoring need. The dataset also does not establish when every predictor would be available in a real school workflow.
+
+The tutoring-capacity scenario is hypothetical. Thresholds were examined descriptively on the held-out test set and were not independently validated as operational decision rules.
+
+The models are intended to demonstrate an analytical workflow, not to make automated decisions about individual students.
+
+## Tools and Technologies
+
+Python, Pandas, Numpy, scikit-learn, Matplotlib, Seaborn, and Google. Colab.
+
+## Data Source
+Uci Machine Learning Repository: student Performance dataset.
+
+https://archive.ics.uci.edu/dataset/320/student+performance
+
+
+
 
