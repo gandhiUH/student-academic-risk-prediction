@@ -59,7 +59,6 @@ The proportion of students with `G3 < 10` was approximately 35% in study-time ca
 |           2 |           35.35 |
 |           3 |           24.62 |
 |           4 |           25.93 |
-
 A separate analysis examined the narrower outcome `G3 == 0` (rather than `G3 < 10`):
 
 | Study-time category | G3 not equal to 0 | G3 equal to 0 |
@@ -68,42 +67,6 @@ A separate analysis examined the narrower outcome `G3 == 0` (rather than `G3 < 1
 | 2 | 91.9% | 8.1% |
 | 3 | 90.8% | 9.2% |
 | 4 | 88.9% | 11.1% |
-
-### Grades across the school year
-
-First-period (`G1`), second-period (`G2`), and final (`G3`) grades were positively correlated. `G2` had the strongest observed correlation with `G3` in this dataset.
-
-### Correlation Between First-period grade (G1) , Second-period grade (G2), Final grade (G3)
-|    |       G1 |       G2 |       G3 |
-|:---|---------:|---------:|---------:|
-| G1 | 1        | 0.852118 | 0.801468 |
-| G2 | 0.852118 | 1        | 0.904868 |
-| G3 | 0.801468 | 0.904868 | 1        |
-
-### Relationship between First-period grades and Final grade
-
-<p align='left'>
-<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/a50a832a-186c-4bd8-b207-6d14729e53b2" />
-</p>
-
-###  Relationship between Second-period and Final grade
-<p align='left'>
-  <img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/7994f519-902e-46c9-a88a-5279ead1249a" />
-</p>
-
-### Grade Changes
-The engineered feature `grade_change = G2 - G1` captures the difference between second- and first-period grades. Students with final grades below 10 generally showed more negative grade changes, although the distributions overlapped. Grade change alone is therefore insufficient to classify students reliably. 
-
-### Distribution of Grade Change
-<p align ='left'>
-<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/9c02dead-4f32-4e39-b4cc-c2368c771393" />
-</p>p>
-
-### Grade Change by Academic Risk
-
-<p align='left'>
-<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/e9b00aec-aac4-44f6-ab28-e5db5f5982a2" />
-</p>
 
 ### Relationship between Study Time and At-Risk Students
 
@@ -138,6 +101,51 @@ Students in study-time categories 3 and 4 had higher mean and median final mathe
 <img width="855" height="547" alt="image" src="https://github.com/user-attachments/assets/e6f73921-fe25-4799-b4c7-f6906c32c621" />	
 </p>
 
+### Grades across the school year
+
+First-period (`G1`), second-period (`G2`), and final (`G3`) grades were positively correlated. `G2` had the strongest observed correlation with `G3` in this dataset.
+
+### Correlation Between First-period grade (G1) , Second-period grade (G2), Final grade (G3)
+|    |       G1 |       G2 |       G3 |
+|:---|---------:|---------:|---------:|
+| G1 | 1        | 0.852118 | 0.801468 |
+| G2 | 0.852118 | 1        | 0.904868 |
+| G3 | 0.801468 | 0.904868 | 1        |
+
+### Relationship between First-period grades and Final grade
+
+<p align='left'>
+<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/a50a832a-186c-4bd8-b207-6d14729e53b2" />
+</p>
+
+First-period mathematics grades (G1) showed a positive relationship with final grades (G3). Students with higher G1 scores generally received higher final grades, while students with lower G1 scores were more frequently classified as academically at risk. However, students with similar first-period grades sometimes had different final outcomes, indicating that G1 alone is insufficient to identify all at-risk students.
+
+###  Relationship between Second-period and Final grade
+<p align='left'>
+  <img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/7994f519-902e-46c9-a88a-5279ead1249a" />
+</p>
+
+Second-period mathematics grades (G2) showed a strong positive relationship with final grades (G3). Students with higher G2 scores generally received higher final grades, while students with lower G2 scores were more frequently classified as academically at risk. Compared with the first-period grade plot, G2 showed a clearer separation between the at-risk and not-at-risk groups. However, students with similar G2 scores sometimes had different final outcomes, indicating that G2 alone cannot identify every at-risk student.
+
+### Grade Changes
+The engineered feature `grade_change = G2 - G1` captures the difference between second- and first-period grades. Students with final grades below 10 generally showed more negative grade changes, although the distributions overlapped. Grade change alone is therefore insufficient to classify students reliably. 
+
+### Distribution of Grade Change
+<p align ='left'>
+<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/9c02dead-4f32-4e39-b4cc-c2368c771393" />
+</p>
+
+Students who received final mathematics grades below 10 generally showed a slightly greater decline between their first- and second-period grades. The median grade change was approximately −1 for at-risk students, compared with 0 for students not classified as at risk. Several at-risk students experienced substantial grade declines. However, the distributions overlapped, indicating that grade change alone is insufficient to identify all at-risk students.
+
+
+### Grade Change by Academic Risk
+
+<p align='left'>
+<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/e9b00aec-aac4-44f6-ab28-e5db5f5982a2" />
+</p>
+
+Students who received final mathematics grades below 10 generally showed a slightly greater decline between their first- and second-period grades. The median grade change was approximately −1 for at-risk students, compared with 0 for students not classified as at risk. Several at-risk students experienced substantial grade declines. However, the distributions overlapped, indicating that grade change alone is insufficient to identify all at-risk students.
+
 ## Experimental Features 
 
 We have conducted experiments with three sets of features:
@@ -169,7 +177,10 @@ We have conducted experiments with three sets of features:
 <img width="400" height="370" alt="image" src="https://github.com/user-attachments/assets/6eb8ff51-e9c6-4191-b9f5-b9d4bd8623eb" />
 </p>
 
+Permutation feature importance showed that first-period mathematics grade (G1) was the most influential predictor in the initial Random Forest model. Previous failures and health provided smaller contributions, while the remaining features had relatively little effect on the model’s F1-score. Travel time had a slightly negative importance value, indicating that shuffling this feature did not reduce model performance. These findings suggest that the model relied primarily on students’ first-period grades when predicting academic risk.
+
 ### 2. 5-Fold Cross-Validation RF 
+The following table shows the
 #### Performance
 
 |    | Metric    |   Mean |   Std |
@@ -179,6 +190,8 @@ We have conducted experiments with three sets of features:
 |  2 | recall    |  0.704 | 0.12  |
 |  3 | f1        |  0.689 | 0.05  |
 
+The Random Forest model was evaluated using five-fold stratified cross-validation on the training set. It achieved a mean accuracy of 0.794, precision of 0.693, recall of 0.704, and F1-score of 0.689. The standard deviations indicate how much each metric varied across the five validation folds. Recall had the largest standard deviation (0.120), suggesting that the model’s ability to identify at-risk students varied more across folds than its overall accuracy.
+
 ### 3. Logistic Regression 
 
 |    | Metric    |   Mean |   Std |
@@ -187,6 +200,9 @@ We have conducted experiments with three sets of features:
 |  1 | precision |  0.691 | 0.096 |
 |  2 | recall    |  0.847 | 0.069 |
 |  3 | f1        |  0.756 | 0.063 |
+
+The Logistic Regression model was evaluated using five-fold stratified cross-validation on the training set. It achieved a mean accuracy of 0.817, precision of 0.691, recall of 0.847, and F1-score of 0.756. The recall indicates that the model identified approximately 84.7% of at-risk students in the validation folds, on average. The standard deviations show how the performance varied across the five folds.
+
 	
 Two prediction models were developed:
 ## Model A: First-period academic risk prediction using Logistic Regression.
