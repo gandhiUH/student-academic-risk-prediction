@@ -15,6 +15,83 @@ No academic risk (0): Final mathematical grade (G3) of 10 or above.
 
 The dataset was divided into 316 training records and 79 held-out records.
 
+## Exploratory Data Analysis
+
+### Previous Failures
+Students with more previous class failures generally had lower final mathematics grades. The median final grade decreased from approximately 11 among students with no previous failures to approximately 7 among students with three previous failures. This pattern suggests that previous failures may be a useful feature for academic-risk prediction. However, low final grades were also observed among students with no previous failures, indicating that this feature alone is insufficient to identify all at-risk students.
+|   failures |   count |   mean |   median |   std |
+|-----------:|--------:|-------:|---------:|------:|
+|          0 |     312 |  11.25 |       11 |  4.17 |
+|          1 |      50 |   8.12 |        9 |  4.71 |
+|          2 |      17 |   6.24 |        8 |  4.84 |
+|          3 |      16 |   5.69 |        7 |  4.19 |
+<p align='center'>
+<img width="400" height="300" alt="image" src="https://github.com/user-attachments/assets/9f98a92c-4bd5-4bc9-a478-bf7d7b5448d8" />
+</p>
+
+### Study Time Vs. Final Grades
+|   studytime |   academic_risk |
+|------------:|----------------:|
+|           1 |           35.24 |
+|           2 |           35.35 |
+|           3 |           24.62 |
+|           4 |           25.93 |
+### Correlation Between First-period grade (G1) , Second-period grade (G2), Final grade (G3)
+|    |       G1 |       G2 |       G3 |
+|:---|---------:|---------:|---------:|
+| G1 | 1        | 0.852118 | 0.801468 |
+| G2 | 0.852118 | 1        | 0.904868 |
+| G3 | 0.801468 | 0.904868 | 1        |
+
+### Relationship between First-period grades and Final grade
+<p align='center'>
+<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/a50a832a-186c-4bd8-b207-6d14729e53b2" />
+</p>
+### Relationship between Second-period and Final grade
+<p align='center'>
+  <img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/7994f519-902e-46c9-a88a-5279ead1249a" />
+</p>
+
+### Distribution of Grade Change
+<p align ='center'>
+<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/9c02dead-4f32-4e39-b4cc-c2368c771393" />
+</p>p>
+
+### Grade Change by Academic Risk
+<p align='center'>
+<img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/e9b00aec-aac4-44f6-ab28-e5db5f5982a2" />
+</p>
+
+### Relationship between Study Time and At-Risk Students
+|   studytime |   total_students |   at_risk_students |   risk_percentage |
+|------------:|-----------------:|-------------------:|------------------:|
+|           1 |              105 |                 37 |           35.2381 |
+|           2 |              198 |                 70 |           35.3535 |
+|           3 |               65 |                 16 |           24.6154 |
+|           4 |               27 |                  7 |           25.9259 |
+
+### Relationship between Zero Final Grade and Studytime
+   studytime |   False |   True |
+|------------:|--------:|-------:|
+|           1 |    87.6 |   12.4 |
+|           2 |    91.9 |    8.1 |
+|           3 |    90.8 |    9.2 |
+|           4 |    88.9 |   11.1 |
+
+## Feature Engineering
+
+###  Class Distribution by Startified Split
+training set class distribution:
+academic_risk
+0    212
+1    104
+Name: count, dtype: int64
+
+Testing set class distribution:
+academic_risk
+0    53
+1    26
+Name: count, dtype: int64
 ## ML Models
 Two prediction models were developed:
 **Model A**:First-period academic risk prediction using Logistic Regression.
