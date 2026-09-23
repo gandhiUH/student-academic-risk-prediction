@@ -15,6 +15,17 @@ No academic risk (0): Final mathematical grade (G3) of 10 or above.
 
 The dataset was divided into 316 training records and 79 held-out records.
 
+## Methodology
+This project includes:
+- Exploratory data analysis of academic performance and student characteristics 
+- Feature engineering, including changes between first and second period grades
+- Data processing using scikit-learn pipelines
+- Model development using Logistic Regression and Random Forest
+- Five-fold stratified cross-validation and held-out test evaluation
+- Error analysis of students incorrectly classified by the models
+- Hypothetical tutoring-capacity analysis using different classification thresholds
+
+
 ## Exploratory Data Analysis
 
 ### Previous Failures
@@ -92,22 +103,70 @@ academic_risk
 0    53
 1    26
 Name: count, dtype: int64
+
+Feature-cols= df\['G1', 'failures', 'studytime', 'schoolsup', 'famsup', 'higher', 'health', 'traveltime'\]
+y= df\['academic_risk'\]
 ## ML Models
+### 1. Initial Model Random Forest with First-period grades
+         precision    recall  f1-score   support
+
+           0       0.84      0.89      0.86        53
+           1       0.74      0.65      0.69        26
+
+    accuracy                           0.81        79
+   macro avg       0.79      0.77      0.78        79
+weighted avg       0.81      0.81      0.81        79
+
+### Feature Importance in Random Forest Pipeline
+<p align='center'>
+<img width="400" height="370" alt="image" src="https://github.com/user-attachments/assets/6eb8ff51-e9c6-4191-b9f5-b9d4bd8623eb" />
+</p>
+
+### 2. 5-Fold Cross-Validation RF 
+#### Performance
+Metric	Mean	Std
+0	accuracy	0.794	0.026
+1	precision	0.693	0.064
+2	recall	0.704	0.120
+3	f1	0.689	0.050
+### 3. Logistic Regression 
+	Metric	Mean	Std
+0	accuracy	0.817	0.058
+1	precision	0.691	0.096
+2	recall	0.847	0.069
+3	f1	0.756	0.063
 Two prediction models were developed:
 **Model A**:First-period academic risk prediction using Logistic Regression.
+df\['grade_change\] = df\['G2'\]-df\['G1'\]
+features_cols2 = \['G1', 'failures', 'studytime', 'schoolsup', 'famsup', 'higher', 'health', 'traveltime', 'G2', 'grade_change']
+Training set shape - Model2: (316, 10)
+Testing set shape - Model2: (79, 10)
 **Model B**: Updated academic risk prediction using Random Forest and additional second-period academic information.
+	Metric	Mean	Std
+0	accuracy	0.902	0.025
+1	precision	0.832	0.047
+2	recall	0.886	0.077
+3	f1	0.855	0.040
 
 This project also examines how classification thresholds affect the number of students flagged for academic-risk review and compares these counts with hypothetical tutoring capacity.
+### Logistic Regressing with Feature_cols2 
+Metric	Mean	Std
+0	accuracy	0.889	0.029
+1	precision	0.795	0.065
+2	recall	0.905	0.052
+3	f1	0.844	0.039
 
-## Methodology
-This project includes:
-- Exploratory data analysis of academic performance and student characteristics 
-- Feature engineering, including changes between first and second period grades
-- Data processing using scikit-learn pipelines
-- Model development using Logistic Regression and Random Forest
-- Five-fold stratified cross-validation and held-out test evaluation
-- Error analysis of students incorrectly classified by the models
-- Hypothetical tutoring-capacity analysis using different classification thresholds
+### Random Forest with Feature_cols3
+Feature_cols3 = df\[featurecols+ 'G2'\]
+
+Metric	Mean	Std
+0	accuracy	0.896	0.027
+1	precision	0.829	0.046
+2	recall	0.867	0.092
+3	f1	0.844	0.045
+## Selected Models for Academic-Risk Prediction:
+1. Model A - Logistic Regression with Feature_cols1 
+2. Model B - Random Forest with Feature_cols2 
 
 ## Model Performance
 |Model	             | Accuracy	| Precision |	Recall | F1 Score |
