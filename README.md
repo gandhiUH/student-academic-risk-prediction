@@ -47,9 +47,36 @@ At a classification threshold of 0.5:
 
 Model A flagged 30 students, exceeding the hypothetical capacity by 10 places. Model B flagged 22 students, exceeding the hypothetical capacity by two places.
 
+On the held-out test set, Model B achieved higher accuracy, precision, and F1-score, while Model A achieved slightly higher recall at the default classification threshold of 0.50. Model A correctly identified 22 of the 26 students who eventually received final grades below 10, compared with 21 identified by Model B. Although Model B identified three at-risk students missed by Model A, it also missed four at-risk students whom Model A had correctly identified. These results demonstrate that updated predictions can identify additional students but should not automatically replace earlier academic-support assessments.
+<p align='center'>
+<img width="400" height="300" alt="image" src="https://github.com/user-attachments/assets/cb89aaf5-905c-463a-9db9-2b386582ebca" />
+</p>
+
 Additional threshold analysis showed that increasing the classification threshold reduced the number of students flagged but could increase the number of students with low final grades who were missed.
 
 The analysis illustrates how predictive analytics can inform academic-support planning while highlighting the importance of considering false negatives, available capacity, and educator review.
+
+## Changes in Academic-Risk Predictions
+
+The first-period and second-period models were compared at the student level using the same 79-student held-out test set.
+
+| Prediction group         |   Number of students |   Students with G3 < 10 |
+|:-------------------------|---------------------:|------------------------:|
+| Flagged by both models   |                   18 |                      18 |
+| Flagged only by Model A  |                   12 |                       4 |
+| Newly flagged by Model B |                    4 |                       3 |
+| Not flagged by either    |                   45 |                       1 |
+
+The second-period model newly flagged four students, three of whom actually received final mathematical grades below 10. All four newly flagged students had lower second-period grades than first-period grades.
+<p align="center">
+<img width="400" height="300" alt="image" src="https://github.com/user-attachments/assets/4903b54d-de15-4c56-b220-eaed7b654ebc" />
+
+</p>
+
+However, the second-period model also stopped flagging 12 students, including four who eventually received final grades below 10.
+
+These results show that updated model predictions can identify additional students while also missing students who were correctly flagged earlier. For educational resource planning, updated predictions should be considered alongside previous assessments rather than automatically replacing them.
+
 
 ## Limitations 
 
@@ -57,7 +84,7 @@ This project is a proof os concept using a small public dataset from Portuguese 
 
 A final grade below 10 is an academic outcome, not a validated measure of individual tutoring need. The dataset also does not establish when every predictor would be available in a real school workflow.
 
-The tutoring-capacity scenario is hypothetical. Thresholds were examined descriptively on the held-out test set and were not independently validated as operational decision rules.
+The tutoring-capacity scenario is hypothetical. Different classification thresholds were evaluated on the held-out test set to illustrate how they affect the number of students flagged and the number of at-risk students missed. These thresholds were not validated on an independent dataset and should not be used as established rules for making tutoring decisions.
 
 The models are intended to demonstrate an analytical workflow, not to make automated decisions about individual students.
 
