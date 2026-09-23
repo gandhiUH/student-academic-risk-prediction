@@ -3,33 +3,42 @@
 
 ## Project Overview
 
-This project investigates how machine learning can be used to predict students' final mathematical performance and support educational resource planning.
-The objective is to identify students who may receive a final grade below 10 using academic information available at different points in the school year.
+This independent, proof-of-concept project explores how machine learning can identify students who may receive a low final mathematics grade and how predictions made at different points in the school year could inform academic-support planning. It compares a first-period model with an updated model that incorporates second-period grades. The project also examines prediction errors, changes in students' risk flags, and a hypothetical tutoring-capacity scenario.
+
+**Key finding:** Of the 79 students in the held-out test set, 26 received a final mathematics grade below 10 and were classified as at risk. Model A flagged 30 students, correctly identifying 22 of the 26 at-risk students. Model B flagged 22 students, correctly identifying 21 of the 26 at-risk students. Thus, Model B flagged fewer students overall but missed one more at-risk student than Model A. 
+
+These results illustrate why updated predictions should be reviewed alongside earlier assessments rather than automatically replacing them.
 
 ## Dataset
-This project uses the UCI Student Performance mathematics dataset, which contains 395 student records from Portuguese secondary schools. 
+This project uses the UCI Student Performance mathematics dataset, which contains 395 student records from Portuguese secondary schools. The final mathematics grade (`G3`) is used to define the binary target:
 
-The target variable was defined as:
 Academic risk (1): Final mathematics grade (G3) below 10.
 No academic risk (0): Final mathematical grade (G3) of 10 or above.
+Here, *academic risk* refers specifically to this final-grade threshold; it is not a validated measure of a student's need for tutoring.
+The data were divided into a stratified training set (316 students; 80%) and a held-out test set (79 students; 20%).
 
-The dataset was divided into 316 training records and 79 held-out records.
+###  Class Distribution by Stratified Split
 
-## Methodology
+```text
+				Training  Testing
+academic_risk 0    212		53
+academic_risk 1    104		26
+```
+
+## Analytical Workflow
 This project includes:
-- Exploratory data analysis of academic performance and student characteristics 
-- Feature engineering, including changes between first and second period grades
-- Data processing using scikit-learn pipelines
-- Model development using Logistic Regression and Random Forest
-- Five-fold stratified cross-validation and held-out test evaluation
-- Error analysis of students incorrectly classified by the models
-- Hypothetical tutoring-capacity analysis using different classification thresholds
-
+1. Explore relationships between final grades, previous failures, study time, and grades earned during the school year.
+2. Prepare predictors using scikit-learn pipelines and engineer `grade_change = G2 - G1` for the updated model.
+3. Compare Logistic Regression and Random Forest using five-fold stratified cross-validation on the training set.
+4. Evaluate the selected first-period and updated models on the same held-out test set.
+5. Examine false negatives, changes in individual students' risk flags, and the effect of classification thresholds on a hypothetical tutoring-capacity scenario.
 
 ## Exploratory Data Analysis
 
-### Previous Failures
-Students with more previous class failures generally had lower final mathematics grades. The median final grade decreased from approximately 11 among students with no previous failures to approximately 7 among students with three previous failures. This pattern suggests that previous failures may be a useful feature for academic-risk prediction. However, low final grades were also observed among students with no previous failures, indicating that this feature alone is insufficient to identify all at-risk students.
+### Previous Class Failures and Final Grades
+
+Students with more previous class failures generally had lower final mathematics grades in this dataset. Median `G3` decreased from 11 for students with no previous failures to 7 for students with three failures. This pattern suggests that previous failures may be a useful feature for academic-risk prediction. However, low final grades were also observed among students with no previous failures, indicating that this feature alone is insufficient to identify all at-risk students.
+
 |   failures |   count |   mean |   median |   std |
 |-----------:|--------:|-------:|---------:|------:|
 |          0 |     312 |  11.25 |       11 |  4.17 |
@@ -40,13 +49,30 @@ Students with more previous class failures generally had lower final mathematics
 <img width="400" height="300" alt="image" src="https://github.com/user-attachments/assets/9f98a92c-4bd5-4bc9-a478-bf7d7b5448d8" />
 </p>
 
-### Study Time Vs. Final Grades
+### Study Time and Academic Risk
+
+The proportion of students with `G3 < 10` was approximately 35% in study-time categories 1 and 2 and approximately 25% in categories 3 and 4. These are descriptive associations, not evidence that study time causes a change in final grades.
+
 |   studytime |   academic_risk |
 |------------:|----------------:|
 |           1 |           35.24 |
 |           2 |           35.35 |
 |           3 |           24.62 |
 |           4 |           25.93 |
+
+A separate analysis examined the narrower outcome `G3 == 0` (rather than `G3 < 10`):
+
+| Study-time category | G3 not equal to 0 | G3 equal to 0 |
+|---:|---:|---:|
+| 1 | 87.6% | 12.4% |
+| 2 | 91.9% | 8.1% |
+| 3 | 90.8% | 9.2% |
+| 4 | 88.9% | 11.1% |
+
+### Grades across the school year
+
+First-period (`G1`), second-period (`G2`), and final (`G3`) grades were positively correlated. `G2` had the strongest observed correlation with `G3` in this dataset.
+
 ### Correlation Between First-period grade (G1) , Second-period grade (G2), Final grade (G3)
 |    |       G1 |       G2 |       G3 |
 |:---|---------:|---------:|---------:|
@@ -55,13 +81,18 @@ Students with more previous class failures generally had lower final mathematics
 | G3 | 0.801468 | 0.904868 | 1        |
 
 ### Relationship between First-period grades and Final grade
+
 <p align='left'>
 <img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/a50a832a-186c-4bd8-b207-6d14729e53b2" />
 </p>
-### Relationship between Second-period and Final grade
+
+###  Relationship between Second-period and Final grade
 <p align='left'>
   <img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/7994f519-902e-46c9-a88a-5279ead1249a" />
 </p>
+
+### Grade Changes
+The engineered feature `grade_change = G2 - G1` captures the difference between second- and first-period grades. Students with final grades below 10 generally showed more negative grade changes, although the distributions overlapped. Grade change alone is therefore insufficient to classify students reliably. 
 
 ### Distribution of Grade Change
 <p align ='left'>
@@ -69,11 +100,15 @@ Students with more previous class failures generally had lower final mathematics
 </p>p>
 
 ### Grade Change by Academic Risk
+
 <p align='left'>
 <img width="500" height="370" alt="image" src="https://github.com/user-attachments/assets/e9b00aec-aac4-44f6-ab28-e5db5f5982a2" />
 </p>
 
 ### Relationship between Study Time and At-Risk Students
+
+Students in study-time categories 3 and 4 had lower proportions of final mathematics grades below 10 than students in categories 1 and 2. However, the at-risk percentage did not decrease consistently across all four categories. These findings suggest an association between reported study time and academic performance, but study time alone is insufficient to identify at-risk students. The analysis does not establish that increasing study time would cause an improvement in final grades.
+
 |   studytime |   total_students |   at_risk_students |   risk_percentage |
 |------------:|-----------------:|-------------------:|------------------:|
 |           1 |              105 |                 37 |           35.2381 |
@@ -89,20 +124,35 @@ Students with more previous class failures generally had lower final mathematics
 |           3 |    90.8 |    9.2 |
 |           4 |    88.9 |   11.1 |
 
-## Feature Engineering
+### Study Time and Final Grades
+Students in study-time categories 3 and 4 had higher mean and median final mathematics grades than students in categories 1 and 2. They also had lower proportions of students classified as academically at risk (G3 < 10). However, the relationship was not strictly increasing across all study-time categories, and final grades varied considerably within each group. These findings suggest an association between reported study time and academic performance, but they do not establish a causal relationship.
 
-###  Class Distribution by Stratified Split
+|   studytime |   count |   mean |   median |   std |
+|------------:|--------:|-------:|---------:|------:|
+|           1 |     105 |  10.05 |       10 |  4.96 |
+|           2 |     198 |  10.17 |       11 |  4.22 |
+|           3 |      65 |  11.4  |       12 |  4.64 |
+|           4 |      27 |  11.26 |       12 |  5.28 |
 
-```text
-				Training  Testing
-academic_risk 0    212		53
-academic_risk 1    104		26
-```
+<p align='left'>
+<img width="855" height="547" alt="image" src="https://github.com/user-attachments/assets/e6f73921-fe25-4799-b4c7-f6906c32c621" />	
+</p>
 
+## Experimental Features 
 
-Feature-cols= df\['G1', 'failures', 'studytime', 'schoolsup', 'famsup', 'higher', 'health', 'traveltime'\]
-y= df\['academic_risk'\]
+We have conducted experiments with three sets of features:
+
+***1.  Basic features + First-period Grades***: 'failures', 'studytime', 'schoolsup', 'famsup', 'higher', 'health', 'traveltime', and 'G1'
+
+***2.  Basic features + First-period Grades + Second-period Grades + Grade Change***: 'failures', 'studytime', 'schoolsup', 'famsup', 'higher', 'health', 'traveltime', G1, 'grade change' (G2-G1)
+
+***3.  Basic features + First-period Grades + Second-period Grades***: 'failures', 'studytime', 'schoolsup', 'famsup', 'higher', 'health', 'traveltime', 'G1', 'G2'
+
+***The target column 'academic_risk' predicted by models is derived using the condition G3 <10.***
+
 ## ML Models
+
+
 ### 1. Initial Model Random Forest with First-period grades
 
 |              |   precision |   recall |   f1-score |   support |
@@ -174,7 +224,19 @@ Feature_cols3 = df\[featurecols+ 'G2'\], Feature_cols3 does not have 'grade_chan
 
 ## Selected Models for Academic-Risk Prediction:
 1. Model A - Logistic Regression with Feature_cols1 
-2. Model B - Random Forest with Feature_cols2 
+2. Model B - Random Forest with Feature_cols2
+
+## Model development
+
+Two prediction stages were evaluated using the same train/test split:
+
+| | Model A: First-period prediction | Model B: Updated prediction |
+|---|---|---|
+| Selected algorithm | Logistic Regression | Random Forest |
+| Predictors | `G1`, `failures`, `studytime`, `schoolsup`, `famsup`, `higher`, `health`, `traveltime` | Model A predictors plus `G2` and `grade_change` |
+| Intended prediction point | After first-period grades are available | After second-period grades are available |
+
+The models differ in both algorithm and available predictors. Differences in performance cannot be attributed solely to the addition of `G2` or `grade_change`. Because `grade_change` is calculated from `G1` and `G2`, it does not introduce a new raw measurement.
 
 ## Model Performance
 |Model	             | Accuracy	| Precision |	Recall | F1 Score |
